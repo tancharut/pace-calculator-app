@@ -18,42 +18,117 @@
     <div class="bg-white p-8 rounded-xl shadow-lg w-full max-w-md">
         <h1 class="text-3xl font-bold text-center text-gray-800 mb-6">คำนวณเพซวิ่ง</h1>
 
-        <!-- User Input Section -->
-        <div class="space-y-4">
-            <div>
-                <label for="username" class="block text-gray-700 text-sm font-semibold mb-1">ชื่อผู้ใช้:</label>
-                <input type="text" id="username" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="ป้อนชื่อของคุณ">
-            </div>
-
-            <div>
-                <label class="block text-gray-700 text-sm font-semibold mb-1">ระยะเวลาวิ่ง:</label>
-                <div class="flex space-x-2">
-                    <input type="number" id="hours" class="w-1/3 p-3 border border-gray-300 rounded-lg text-right focus:outline-none focus:ring-2 focus:ring-blue-500" value="0" min="0">
-                    <span class="flex items-center text-gray-600">ชั่วโมง</span>
-                    <input type="number" id="minutes" class="w-1/3 p-3 border border-gray-300 rounded-lg text-right focus:outline-none focus:ring-2 focus:ring-blue-500" value="0" min="0">
-                    <span class="flex items-center text-gray-600">นาที</span>
-                    <input type="number" id="seconds" class="w-1/3 p-3 border border-gray-300 rounded-lg text-right focus:outline-none focus:ring-2 focus:ring-blue-500" value="0" min="0">
-                    <span class="flex items-center text-gray-600">วินาที</span>
+        <!-- User Input Section - Current Pace Calculation -->
+        <div class="mb-8 p-6 bg-blue-50 rounded-lg border border-blue-200">
+            <h2 class="text-xl font-semibold text-gray-700 mb-4">คำนวณเพซปัจจุบัน</h2>
+            <div class="space-y-4">
+                <div>
+                    <label for="username" class="block text-gray-700 text-sm font-semibold mb-1">ชื่อผู้ใช้:</label>
+                    <input type="text" id="username" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="ป้อนชื่อของคุณ">
                 </div>
+
+                <div>
+                    <label class="block text-gray-700 text-sm font-semibold mb-1">ระยะเวลาวิ่ง:</label>
+                    <div class="flex space-x-2 items-center">
+                        <input type="number" id="hours" class="w-1/3 p-3 border border-gray-300 rounded-lg text-right focus:outline-none focus:ring-2 focus:ring-blue-500" value="0" min="0">
+                        <span class="text-gray-600">ชั่วโมง</span>
+                        <input type="number" id="minutes" class="w-1/3 p-3 border border-gray-300 rounded-lg text-right focus:outline-none focus:ring-2 focus:ring-blue-500" value="0" min="0">
+                        <span class="text-gray-600">นาที</span>
+                        <input type="number" id="seconds" class="w-1/3 p-3 border border-gray-300 rounded-lg text-right focus:outline-none focus:ring-2 focus:ring-blue-500" value="0" min="0">
+                        <span class="text-gray-600">วินาที</span>
+                    </div>
+                </div>
+
+                <div>
+                    <label for="distance" class="block text-gray-700 text-sm font-semibold mb-1">ระยะทาง (กม.):</label>
+                    <input type="number" id="distance" class="w-full p-3 border border-gray-300 rounded-lg text-right focus:outline-none focus:ring-2 focus:ring-blue-500" value="0.0" step="0.01" min="0">
+                </div>
+
+                <!-- Error Message Display for Current Pace -->
+                <div id="currentPaceErrorMessage" class="text-red-600 text-sm text-center hidden"></div>
+
+                <!-- Calculate Button for Current Pace -->
+                <button onclick="calculatePace()" class="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition duration-300 ease-in-out shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
+                    คำนวณเพซ
+                </button>
             </div>
-
-            <div>
-                <label for="distance" class="block text-gray-700 text-sm font-semibold mb-1">ระยะทาง (กม.):</label>
-                <input type="number" id="distance" class="w-full p-3 border border-gray-300 rounded-lg text-right focus:outline-none focus:ring-2 focus:ring-blue-500" value="0.0" step="0.01" min="0">
+            <!-- Result Display Section for Current Pace -->
+            <div id="resultDisplay" class="mt-6 p-4 bg-white rounded-lg border border-blue-100 text-gray-800 text-lg leading-relaxed hidden">
+                <!-- Results will be displayed here -->
             </div>
-
-            <!-- Error Message Display -->
-            <div id="errorMessage" class="text-red-600 text-sm text-center hidden"></div>
-
-            <!-- Calculate Button -->
-            <button onclick="calculatePace()" class="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition duration-300 ease-in-out shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
-                คำนวณเพซ
-            </button>
         </div>
 
-        <!-- Result Display Section -->
-        <div id="resultDisplay" class="mt-8 p-6 bg-blue-50 rounded-lg border border-blue-200 text-gray-800 text-lg leading-relaxed hidden">
-            <!-- Results will be displayed here -->
+        <!-- Goal Setting Section -->
+        <div class="mb-8 p-6 bg-green-50 rounded-lg border border-green-200">
+            <h2 class="text-xl font-semibold text-gray-700 mb-4">ตั้งเป้าหมายการวิ่ง</h2>
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-gray-700 text-sm font-semibold mb-1">เพซเป้าหมาย (นาที/กม.):</label>
+                    <div class="flex space-x-2 items-center">
+                        <input type="number" id="targetPaceMinutes" class="w-1/2 p-3 border border-gray-300 rounded-lg text-right focus:outline-none focus:ring-2 focus:ring-green-500" value="0" min="0">
+                        <span class="text-gray-600">นาที</span>
+                        <input type="number" id="targetPaceSeconds" class="w-1/2 p-3 border border-gray-300 rounded-lg text-right focus:outline-none focus:ring-2 focus:ring-green-500" value="0" min="0" max="59">
+                        <span class="text-gray-600">วินาที</span>
+                    </div>
+                </div>
+
+                <div>
+                    <label for="targetDistance" class="block text-gray-700 text-sm font-semibold mb-1">ระยะทางเป้าหมาย (กม.):</label>
+                    <input type="number" id="targetDistance" class="w-full p-3 border border-gray-300 rounded-lg text-right focus:outline-none focus:ring-2 focus:ring-green-500" value="0.0" step="0.01" min="0">
+                </div>
+
+                <!-- Error Message Display for Goal Setting -->
+                <div id="goalErrorMessage" class="text-red-600 text-sm text-center hidden"></div>
+
+                <!-- Calculate Button for Goal Setting -->
+                <button onclick="calculateTargetTime()" class="w-full bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 transition duration-300 ease-in-out shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50">
+                    คำนวณเวลาเป้าหมาย
+                </button>
+            </div>
+            <!-- Result Display Section for Goal Setting -->
+            <div id="targetTimeResultDisplay" class="mt-6 p-4 bg-white rounded-lg border border-green-100 text-gray-800 text-lg leading-relaxed hidden">
+                <!-- Target time results will be displayed here -->
+            </div>
+        </div>
+
+        <!-- Calculate Distance Section (New Feature) -->
+        <div class="p-6 bg-purple-50 rounded-lg border border-purple-200">
+            <h2 class="text-xl font-semibold text-gray-700 mb-4">คำนวณระยะทาง</h2>
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-gray-700 text-sm font-semibold mb-1">เวลาที่ใช้ (ชั่วโมง:นาที:วินาที):</label>
+                    <div class="flex space-x-2 items-center">
+                        <input type="number" id="timeUsedHours" class="w-1/3 p-3 border border-gray-300 rounded-lg text-right focus:outline-none focus:ring-2 focus:ring-purple-500" value="0" min="0">
+                        <span class="text-gray-600">ชั่วโมง</span>
+                        <input type="number" id="timeUsedMinutes" class="w-1/3 p-3 border border-gray-300 rounded-lg text-right focus:outline-none focus:ring-2 focus:ring-purple-500" value="0" min="0">
+                        <span class="text-gray-600">นาที</span>
+                        <input type="number" id="timeUsedSeconds" class="w-1/3 p-3 border border-gray-300 rounded-lg text-right focus:outline-none focus:ring-2 focus:ring-purple-500" value="0" min="0">
+                        <span class="text-gray-600">วินาที</span>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-gray-700 text-sm font-semibold mb-1">เพซ (นาที/กม.):</label>
+                    <div class="flex space-x-2 items-center">
+                        <input type="number" id="paceToDistanceMinutes" class="w-1/2 p-3 border border-gray-300 rounded-lg text-right focus:outline-none focus:ring-2 focus:ring-purple-500" value="0" min="0">
+                        <span class="text-gray-600">นาที</span>
+                        <input type="number" id="paceToDistanceSeconds" class="w-1/2 p-3 border border-gray-300 rounded-lg text-right focus:outline-none focus:ring-2 focus:ring-purple-500" value="0" min="0" max="59">
+                        <span class="text-gray-600">วินาที</span>
+                    </div>
+                </div>
+
+                <!-- Error Message Display for Calculate Distance -->
+                <div id="distanceErrorMessage" class="text-red-600 text-sm text-center hidden"></div>
+
+                <!-- Calculate Button for Calculate Distance -->
+                <button onclick="calculateTargetDistance()" class="w-full bg-purple-600 text-white py-3 rounded-lg hover:bg-purple-700 transition duration-300 ease-in-out shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-50">
+                    คำนวณระยะทาง
+                </button>
+            </div>
+            <!-- Result Display Section for Calculate Distance -->
+            <div id="targetDistanceResultDisplay" class="mt-6 p-4 bg-white rounded-lg border border-purple-100 text-gray-800 text-lg leading-relaxed hidden">
+                <!-- Target distance results will be displayed here -->
+            </div>
         </div>
     </div>
 
@@ -69,7 +144,7 @@
             const seconds = parseInt(document.getElementById('seconds').value);
             const distance = parseFloat(document.getElementById('distance').value);
 
-            const errorMessageDiv = document.getElementById('errorMessage');
+            const errorMessageDiv = document.getElementById('currentPaceErrorMessage');
             const resultDisplayDiv = document.getElementById('resultDisplay');
 
             // Clear previous error messages and results
@@ -111,6 +186,137 @@
                     <p><strong>เพซวิ่ง:</strong> ${String(paceMinutes).padStart(2, '0')} นาที ${String(paceSeconds).padStart(2, '0')} วินาที/กม.</p>
                 `;
                 
+                // Display the result
+                resultDisplayDiv.innerHTML = resultText;
+                resultDisplayDiv.classList.remove('hidden');
+
+            } catch (error) {
+                // Display error message in the UI
+                errorMessageDiv.textContent = `ข้อผิดพลาด: ${error.message}`;
+                errorMessageDiv.classList.remove('hidden');
+            }
+        }
+
+        /**
+         * Function to calculate target time based on target pace and distance.
+         */
+        function calculateTargetTime() {
+            const targetPaceMinutes = parseInt(document.getElementById('targetPaceMinutes').value);
+            const targetPaceSeconds = parseInt(document.getElementById('targetPaceSeconds').value);
+            const targetDistance = parseFloat(document.getElementById('targetDistance').value);
+
+            const errorMessageDiv = document.getElementById('goalErrorMessage');
+            const resultDisplayDiv = document.getElementById('targetTimeResultDisplay');
+
+            // Clear previous error messages and results
+            errorMessageDiv.textContent = '';
+            errorMessageDiv.classList.add('hidden');
+            resultDisplayDiv.classList.add('hidden');
+
+            try {
+                // Input validation
+                if (isNaN(targetPaceMinutes) || isNaN(targetPaceSeconds) || isNaN(targetDistance)) {
+                    throw new Error("โปรดป้อนข้อมูลเป้าหมายให้ถูกต้อง");
+                }
+
+                if (targetPaceMinutes < 0 || targetPaceSeconds < 0 || targetPaceSeconds >= 60) {
+                    throw new Error("เพซเป้าหมายไม่ถูกต้อง (วินาทีต้องอยู่ระหว่าง 0-59)");
+                }
+
+                if (targetDistance <= 0) {
+                    throw new Error("ระยะทางเป้าหมายต้องมากกว่า 0");
+                }
+
+                // Convert target pace to total minutes per km
+                const pacePerKmInMinutes = targetPaceMinutes + (targetPaceSeconds / 60);
+
+                // Check if pace is zero to prevent division by zero
+                if (pacePerKmInMinutes === 0) {
+                    throw new Error("เพซเป้าหมายต้องมากกว่า 0");
+                }
+
+                // Calculate total target time in minutes
+                const totalTargetTimeInMinutes = pacePerKmInMinutes * targetDistance;
+
+                // Convert total target time back to hours, minutes, seconds
+                const targetHours = Math.floor(totalTargetTimeInMinutes / 60);
+                const remainingMinutes = totalTargetTimeInMinutes % 60;
+                const targetMinutes = Math.floor(remainingMinutes);
+                const targetSeconds = Math.round((remainingMinutes - targetMinutes) * 60);
+
+                // Format the output for display
+                const resultText = `
+                    <p><strong>เพซเป้าหมาย:</strong> ${String(targetPaceMinutes).padStart(2, '0')} นาที ${String(targetPaceSeconds).padStart(2, '0')} วินาที/กม.</p>
+                    <p><strong>ระยะทางเป้าหมาย:</strong> ${targetDistance.toFixed(2)} กม.</p>
+                    <p><strong>เวลาที่ต้องใช้:</strong> ${String(targetHours).padStart(2, '0')}:${String(targetMinutes).padStart(2, '0')}:${String(targetSeconds).padStart(2, '0')}</p>
+                `;
+
+                // Display the result
+                resultDisplayDiv.innerHTML = resultText;
+                resultDisplayDiv.classList.remove('hidden');
+
+            } catch (error) {
+                // Display error message in the UI
+                errorMessageDiv.textContent = `ข้อผิดพลาด: ${error.message}`;
+                errorMessageDiv.classList.remove('hidden');
+            }
+        }
+
+        /**
+         * Function to calculate target distance based on time used and pace.
+         */
+        function calculateTargetDistance() {
+            const timeUsedHours = parseInt(document.getElementById('timeUsedHours').value);
+            const timeUsedMinutes = parseInt(document.getElementById('timeUsedMinutes').value);
+            const timeUsedSeconds = parseInt(document.getElementById('timeUsedSeconds').value);
+            const paceToDistanceMinutes = parseInt(document.getElementById('paceToDistanceMinutes').value);
+            const paceToDistanceSeconds = parseInt(document.getElementById('paceToDistanceSeconds').value);
+
+            const errorMessageDiv = document.getElementById('distanceErrorMessage');
+            const resultDisplayDiv = document.getElementById('targetDistanceResultDisplay');
+
+            // Clear previous error messages and results
+            errorMessageDiv.textContent = '';
+            errorMessageDiv.classList.add('hidden');
+            resultDisplayDiv.classList.add('hidden');
+
+            try {
+                // Input validation
+                if (isNaN(timeUsedHours) || isNaN(timeUsedMinutes) || isNaN(timeUsedSeconds) ||
+                    isNaN(paceToDistanceMinutes) || isNaN(paceToDistanceSeconds)) {
+                    throw new Error("โปรดป้อนข้อมูลให้ถูกต้อง");
+                }
+
+                if (timeUsedHours < 0 || timeUsedMinutes < 0 || timeUsedSeconds < 0) {
+                    throw new Error("เวลาที่ใช้ต้องไม่ติดลบ");
+                }
+
+                if (paceToDistanceMinutes < 0 || paceToDistanceSeconds < 0 || paceToDistanceSeconds >= 60) {
+                    throw new Error("เพซไม่ถูกต้อง (วินาทีต้องอยู่ระหว่าง 0-59)");
+                }
+
+                const totalTimeInMinutes = (timeUsedHours * 60) + timeUsedMinutes + (timeUsedSeconds / 60);
+                const pacePerKmInMinutes = paceToDistanceMinutes + (paceToDistanceSeconds / 60);
+
+                // Check for division by zero
+                if (pacePerKmInMinutes === 0) {
+                    throw new Error("เพซต้องมากกว่า 0 เพื่อคำนวณระยะทาง");
+                }
+
+                // Check if total time is zero
+                if (totalTimeInMinutes === 0) {
+                    throw new Error("เวลาที่ใช้ต้องมากกว่า 0 เพื่อคำนวณระยะทาง");
+                }
+
+                const calculatedDistance = totalTimeInMinutes / pacePerKmInMinutes;
+
+                // Format the output for display
+                const resultText = `
+                    <p><strong>เวลาที่ใช้:</strong> ${String(timeUsedHours).padStart(2, '0')}:${String(timeUsedMinutes).padStart(2, '0')}:${String(timeUsedSeconds).padStart(2, '0')}</p>
+                    <p><strong>เพซ:</strong> ${String(paceToDistanceMinutes).padStart(2, '0')} นาที ${String(paceToDistanceSeconds).padStart(2, '0')} วินาที/กม.</p>
+                    <p><strong>ระยะทางที่ได้:</strong> ${calculatedDistance.toFixed(2)} กม.</p>
+                `;
+
                 // Display the result
                 resultDisplayDiv.innerHTML = resultText;
                 resultDisplayDiv.classList.remove('hidden');
